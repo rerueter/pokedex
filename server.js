@@ -122,7 +122,20 @@ app.put("/api/v1/pokemon/:id", (request, response) => {
 
 //delete id === pokemon id
 app.delete("/api/v1/pokemon/:id", (request, response) =>
-  response.json({ message: "pokemon delete", params: request.params })
+  // response.json({ message: "pokemon delete", params: request.params })
+  db.Pokemon.findByIdAndDelete(request.params.id, (error, deletedPokemon) => {
+    if (error) {
+      return response // <==NOTE == this must be returned, or it will try to send two responses / won't stop executing code.
+        .status(500)
+        .json({ message: "Something went wrong", error: error });
+    }
+    const responseObj = {
+      status: 200,
+      data: DeletedPokemon,
+      requestedAt: new Date().toLocaleString()
+    };
+    response.status(200).json(responseObj);
+  })
 );
 //Trainer Routes
 
