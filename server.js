@@ -56,23 +56,68 @@ app.get("/api/v1/pokemon", (request, response) => {
     response.status(200).json(responseObj);
   });
 });
+
 //create
 app.post("/api/v1/pokemon", (request, response) => {
-  response.json({ message: "pokemon create", body: request.body });
+  //  response.json({ message: "pokemon create", body: request.body }); // testing echo
+  db.Pokemon.create(request.body, (error, createdPokemon) => {
+    if (error) {
+      return response // <==NOTE == this must be returned, or it will try to send two responses / won't stop executing code.
+        .status(500)
+        .json({ message: "Something went wrong", error: error });
+    }
+    const responseObj = {
+      status: 200,
+      data: createdPokemon,
+      requestedAt: new Date().toLocaleString()
+    };
+    response.status(200).json(responseObj);
+  });
 });
 
 //show -> id === pokemon id
 app.get("/api/v1/pokemon/:id", (request, response) => {
-  response.json({ message: "pokemon show", id: request.params.id });
+  //response.json({ message: "pokemon show", id: request.params.id }); //NOTE testing echo
+  db.Pokemon.findById(request.params.id, (error, foundPokemon) => {
+    if (error) {
+      return response // <==NOTE == this must be returned, or it will try to send two responses / won't stop executing code.
+        .status(500)
+        .json({ message: "Something went wrong", error: error });
+    }
+    const responseObj = {
+      status: 200,
+      data: foundPokemon,
+      requestedAt: new Date().toLocaleString()
+    };
+    response.status(200).json(responseObj);
+  });
 });
 
 //update id === pokemon id
 app.put("/api/v1/pokemon/:id", (request, response) => {
-  response.json({
-    message: "pokemon show",
-    params: request.params,
-    body: request.body
-  });
+  // response.json({
+  //   message: "pokemon show",
+  //   params: request.params,
+  //   body: request.body
+  // });
+  db.Pokemon.findByIdAndUpdate(
+    request.params.id,
+    request.body,
+    { new: true },
+    (error, updatedPokemon) => {
+      if (error) {
+        return response // <==NOTE == this must be returned, or it will try to send two responses / won't stop executing code.
+          .status(500)
+          .json({ message: "Something went wrong", error: error });
+      }
+      const responseObj = {
+        status: 200,
+        data: updatedPokemon,
+        requestedAt: new Date().toLocaleString()
+      };
+      response.status(200).json(responseObj);
+    }
+  );
 });
 
 //delete id === pokemon id
