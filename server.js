@@ -4,6 +4,7 @@ const express = require("express"); // this looks in node_modules
 const bodyParser = require("body-parser");
 
 //Internal Modules
+const db = require("./models");
 
 //Instanced Modules (modules that must be invoked to be accessed and used)
 const app = express();
