@@ -19,8 +19,52 @@ app.use(bodyParser.json()); // creates request.body - this looks at the 'body' o
 app.get("/", (request, response) => {
   response.send(`<h1>Welcome to the Pokedex API</h1>`);
 });
+
 //NOTE --- API Routes
+//Documentation Route
+app.get("/api/v1", (request, response) => {
+  const doc = {
+    status: 200,
+    message: "Welcome to the Pokedex API.",
+    endpoints: [
+      {
+        method: "GET",
+        path: "/api/v1",
+        description: "Describes all available endpoints."
+      }
+    ]
+  };
+  response.json(doc);
+});
+
 //Pokemon Routes
+//index
+app.get("/api/v1/pokemon", (request, response) => {
+  response.json({ message: "pokemon index" });
+});
+//create
+app.post("/api/v1/pokemon", (request, response) => {
+  response.json({ message: "pokemon create", body: request.body });
+});
+
+//show -> id === pokemon id
+app.get("/api/v1/pokemon/:id", (request, response) => {
+  response.json({ message: "pokemon show", id: request.params.id });
+});
+
+//update id === pokemon id
+app.put("/api/v1/pokemon/:id", (request, response) => {
+  response.json({
+    message: "pokemon show",
+    params: request.params,
+    body: request.body
+  });
+});
+
+//delete id === pokemon id
+app.delete("/api/v1/pokemon/:id", (request, response) =>
+  response.json({ message: "pokemon delete", params: request.params })
+);
 //Trainer Routes
 
 // --- 404 Route
