@@ -16,6 +16,9 @@ app.use(bodyParser.json()); // creates request.body - this looks at the 'body' o
 
 //SECTION --------------- Routes
 //NOTE --- View Routes
+app.get("/", (request, response) => {
+  response.send(`<h1>Welcome to the Pokedex API</h1>`);
+});
 //NOTE --- API Routes
 //Pokemon Routes
 //Trainer Routes
