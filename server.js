@@ -41,7 +41,20 @@ app.get("/api/v1", (request, response) => {
 //Pokemon Routes
 //index
 app.get("/api/v1/pokemon", (request, response) => {
-  response.json({ message: "pokemon index" });
+  db.Pokemon.find({}, (error, allPokemon) => {
+    if (error) {
+      return response // <==NOTE == this must be returned, or it will try to send two responses / won't stop executing code.
+        .status(500)
+        .json({ message: "Something went wrong", error: error });
+    }
+    const responseObj = {
+      status: 200,
+      data: allPokemon,
+      length: allPokemon.length,
+      requestedAt: new Date().toLocaleString()
+    };
+    response.status(200).json(responseObj);
+  });
 });
 //create
 app.post("/api/v1/pokemon", (request, response) => {

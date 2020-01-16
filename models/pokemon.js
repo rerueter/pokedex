@@ -12,4 +12,5 @@ const PokemonSchema = new Schema({
 });
 
 const Pokemon = mongoose.model("Pokemon", PokemonSchema);
+
 module.exports = Pokemon;
